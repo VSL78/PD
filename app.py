@@ -401,59 +401,59 @@ elif authentication_status == True:
                     st.warning("⚠️ Inserisci esattamente due dati per trovare il terzo!")
     
         # === CASO 2: MRUA ===
-        elif tipo_moto == "Accelerazione Costante (MRUA)":
-            st.write("---")
-            st.markdown("**Aiutami a capire i dati del testo:**")
-            
-            da_fermo = st.checkbox("Il testo dice che il corpo 'parte da fermo'?")
-            si_ferma = st.checkbox("Il testo dice che il corpo 'si ferma' o 'frena fino a fermarsi'?")
-            
-            if da_fermo:
-                v0 = 0.0
-                st.info("💡 *Dato automatico impostato:* Velocità iniziale $v_0 = 0$ m/s (perché parte da fermo).")
-            else:
-                v0 = st.number_input("Inserisci la velocità iniziale ($v_0$) in m/s:", value=0.0)
+            elif tipo_moto == "Accelerazione Costante (MRUA)":
+                st.write("---")
+                st.markdown("**Aiutami a capire i dati del testo:**")
                 
-            if si_ferma:
-                v_finale = 0.0
-                st.info("💡 *Dato automatico impostato:* Velocità finale $v = 0$ m/s (perché si ferma).")
-            else:
-                v_finale = st.number_input("Inserisci la velocità finale ($v$) in m/s:", value=10.0)
+                da_fermo = st.checkbox("Il testo dice che il corpo 'parte da fermo'?")
+                si_ferma = st.checkbox("Il testo dice che il corpo 'si ferma' o 'frena fino a fermarsi'?")
                 
-            tempo = st.number_input("Inserisci il tempo ($t$) in secondi (metti 0 se è l'incognita):", value=0.0)
-            spazio = st.number_input("Inserisci lo spazio ($s$) in metri (metti 0 se è l'incognita):", value=0.0)
-            accelerazione = st.number_input("Inserisci l'accelerazione ($a$) in m/s² (metti 0 se è l'incognita):", value=0.0)
-            
-            if st.button("Risolvi Problema MRUA"):
-                st.write("### 🎯 Soluzione:")
-                import sympy as sp
-                
-                if tempo == 0.0 and spazio > 0 and accelerazione > 0:
-                    a_segno = -accelerazione if v_finale < v0 else accelerazione
-                    t_esatto = sp.Rational(str(v_finale - v0)) / sp.Rational(str(a_segno))
-                    st.markdown("**1. Scelta della formula più adatta:**")
-                    st.latex(r"v = v_0 + a \cdot t \implies t = \frac{v - v_0}{a}")
-                    st.markdown("**2. Sostituzione dei dati e calcolo:**")
-                    st.latex(f"t = \\frac{{{v_finale} - {v0}}}{{{a_segno}}} = {sp.latex(t_esatto)} \\text{{ secondi}}")
-                    
-                elif accelerazione == 0.0 and tempo > 0:
-                    a_esatta = sp.Rational(str(v_finale - v0)) / sp.Rational(str(tempo))
-                    st.markdown("**1. Formula applicata:**")
-                    st.latex(r"a = \frac{v - v_0}{t}")
-                    st.markdown("**2. Calcolo:**")
-                    st.latex(f"a = \\frac{{{v_finale} - {v0}}}{{{tempo}}} = {sp.latex(a_esatta)} \\text{{ m/s}} ^2")
-                    
-                elif spazio == 0.0 and tempo > 0 and accelerazione > 0:
-                    v0_sym = sp.Rational(str(v0))
-                    t_sym = sp.Rational(str(tempo))
-                    a_sym = sp.Rational(str(accelerazione))
-                    s_esatto = v0_sym * t_sym + sp.Rational(1, 2) * a_sym * t_sym**2
-                    st.markdown("**1. Formula applicata (Legge Oraria):**")
-                    st.latex(r"s = v_0 \cdot t + \frac{1}{2}a \cdot t^2")
-                    st.markdown("**2. Calcolo:**")
-                    st.latex(f"s = {v0} \\cdot {tempo} + \\frac{{1}}{{2}} \\cdot {accelerazione} \\cdot {tempo}^2 = {sp.latex(s_esatto)} \\text{{ metri}}")
+                if da_fermo:
+                    v0 = 0.0
+                    st.info("💡 *Dato automatico impostato:* Velocità iniziale $v_0 = 0$ m/s (perché parte da fermo).")
                 else:
-                    st.warning("⚠️ Combinazione di dati non ancora supportata o dati insufficienti per risolvere il problema.")
+                    v0 = st.number_input("Inserisci la velocità iniziale ($v_0$) in m/s:", value=0.0)
+                    
+                if si_ferma:
+                    v_finale = 0.0
+                    st.info("💡 *Dato automatico impostato:* Velocità finale $v = 0$ m/s (perché si ferma).")
+                else:
+                    v_finale = st.number_input("Inserisci la velocità finale ($v$) in m/s:", value=10.0)
+                    
+                tempo = st.number_input("Inserisci il tempo ($t$) in secondi (metti 0 se è l'incognita):", value=0.0)
+                spazio = st.number_input("Inserisci lo spazio ($s$) in metri (metti 0 se è l'incognita):", value=0.0)
+                accelerazione = st.number_input("Inserisci l'accelerazione ($a$) in m/s² (metti 0 se è l'incognita):", value=0.0)
+                
+                if st.button("Risolvi Problema MRUA"):
+                    st.write("### 🎯 Soluzione:")
+                    import sympy as sp
+                    
+                    if tempo == 0.0 and spazio > 0 and accelerazione > 0:
+                        a_segno = -accelerazione if v_finale < v0 else accelerazione
+                        t_esatto = sp.Rational(str(v_finale - v0)) / sp.Rational(str(a_segno))
+                        st.markdown("**1. Scelta della formula più adatta:**")
+                        st.latex(r"v = v_0 + a \cdot t \implies t = \frac{v - v_0}{a}")
+                        st.markdown("**2. Sostituzione dei dati e calcolo:**")
+                        st.latex(f"t = \\frac{{{v_finale} - {v0}}}{{{a_segno}}} = {sp.latex(t_esatto)} \\text{{ secondi}}")
+                        
+                    elif accelerazione == 0.0 and tempo > 0:
+                        a_esatta = sp.Rational(str(v_finale - v0)) / sp.Rational(str(tempo))
+                        st.markdown("**1. Formula applicata:**")
+                        st.latex(r"a = \frac{v - v_0}{t}")
+                        st.markdown("**2. Calcolo:**")
+                        st.latex(f"a = \\frac{{{v_finale} - {v0}}}{{{tempo}}} = {sp.latex(a_esatta)} \\text{{ m/s}} ^2")
+                        
+                    elif spazio == 0.0 and tempo > 0 and accelerazione > 0:
+                        v0_sym = sp.Rational(str(v0))
+                        t_sym = sp.Rational(str(tempo))
+                        a_sym = sp.Rational(str(accelerazione))
+                        s_esatto = v0_sym * t_sym + sp.Rational(1, 2) * a_sym * t_sym**2
+                        st.markdown("**1. Formula applicata (Legge Oraria):**")
+                        st.latex(r"s = v_0 \cdot t + \frac{1}{2}a \cdot t^2")
+                        st.markdown("**2. Calcolo:**")
+                        st.latex(f"s = {v0} \\cdot {tempo} + \\frac{{1}}{{2}} \\cdot {accelerazione} \\cdot {tempo}^2 = {sp.latex(s_esatto)} \\text{{ metri}}")
+                    else:
+                        st.warning("⚠️ Combinazione di dati non ancora supportata o dati insufficienti per risolvere il problema.")
     
         # === CASO 3: SORPASSO ===
         elif tipo_moto == "Problema di Sorpasso (MRU + MRU)":
