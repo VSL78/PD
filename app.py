@@ -456,135 +456,135 @@ elif authentication_status == True:
                         st.warning("⚠️ Combinazione di dati non ancora supportata o dati insufficienti per risolvere il problema.")
     
         # === CASO 3: SORPASSO ===
-        elif tipo_moto == "Problema di Sorpasso (MRU + MRU)":
-            st.write("---")
-            st.markdown("### 🎯 Risoluzione del Sorpasso (MRU + MRU)")
-            st.write("Immaginiamo l'Auto A che insegue l'Auto B che parte con un vantaggio iniziale.")
-    
-            st.markdown("#### Dati dell'Auto A")
-            v_a = st.number_input("Velocità dell'Auto A ($v_A$) in m/s:", value=0.0, step=1.0)
-    
-            st.markdown("#### Dati dell'Auto B")
-            v_b = st.number_input("Velocità dell'Auto B ($v_B$) in m/s:", value=0.0, step=1.0)
-            distanza = st.number_input("Distanza o Vantaggio iniziale ($d$) in metri:", value=0.0, step=5.0)
-    
-            if st.button("Risolvi Sorpasso"):
-                if distanza <= 0:
-                    st.warning("⚠️ Inserisci una distanza iniziale maggiore di 0.")
-                elif v_a <= v_b:
-                    st.error("Il sorpasso è impossibile: le due auto viaggiano alla stessa velocità o l'auto dietro è più lenta!")
-                else:
+            elif tipo_moto == "Problema di Sorpasso (MRU + MRU)":
+                st.write("---")
+                st.markdown("### 🎯 Risoluzione del Sorpasso (MRU + MRU)")
+                st.write("Immaginiamo l'Auto A che insegue l'Auto B che parte con un vantaggio iniziale.")
+        
+                st.markdown("#### Dati dell'Auto A")
+                v_a = st.number_input("Velocità dell'Auto A ($v_A$) in m/s:", value=0.0, step=1.0)
+        
+                st.markdown("#### Dati dell'Auto B")
+                v_b = st.number_input("Velocità dell'Auto B ($v_B$) in m/s:", value=0.0, step=1.0)
+                distanza = st.number_input("Distanza o Vantaggio iniziale ($d$) in metri:", value=0.0, step=5.0)
+        
+                if st.button("Risolvi Sorpasso"):
+                    if distanza <= 0:
+                        st.warning("⚠️ Inserisci una distanza iniziale maggiore di 0.")
+                    elif v_a <= v_b:
+                        st.error("Il sorpasso è impossibile: le due auto viaggiano alla stessa velocità o l'auto dietro è più lenta!")
+                    else:
+                        import sympy as sp
+                        va_sym = sp.Rational(str(v_a))
+                        vb_sym = sp.Rational(str(v_b))
+                        d_sym = sp.Rational(str(distanza))
+                        
+                        t_sorpasso = d_sym / sp.Abs(va_sym - vb_sym)
+                        v_inseguitrice = va_sym if va_sym > vb_sym else vb_sym
+                        s_sorpasso = v_inseguitrice * t_sorpasso
+                        
+                        t_decimale = float(t_sorpasso.evalf())
+                        s_decimale = float(s_sorpasso.evalf())
+                        
+                        st.markdown("***1. Condizione di sorpasso/incontro:***")
+                        st.latex(r"t = \frac{d}{|v_A - v_B|}")
+                        st.markdown("***2. Sostituzione dei dati e calcolo del tempo:***")
+                        st.latex(f"t = \\frac{{{distanza}}}{{\\lvert {v_a} - {v_b} \\rvert}} = {sp.latex(t_sorpasso)} \\approx {t_decimale:.2f} \\text{{ secondi}}")
+                        st.markdown("***3. Calcolo dello spazio in cui avviene il sorpasso:***")
+                        st.latex(f"s = {float(v_inseguitrice.evalf()):.2f} \\cdot {t_decimale:.2f} = {sp.latex(s_sorpasso)} \\approx {s_decimale:.2f} \\text{{ metri}}")
+                        st.info(f"L'Auto A sorpasserà l'Auto B dopo {t_decimale:.2f} secondi, ad una distanza di {s_decimale:.2f} metri dal punto iniziale.")
+        
+            # === CASO 4: INCONTRO ===
+            # === CASO 4: INCONTRO / SORPASSO UNIVERSALE ===
+            # === CASO 4: INCONTRO / SORPASSO UNIVERSALE ===
+            elif tipo_moto == "Incontro (MRU + MRUA)":
+                st.write("---")
+                st.markdown("### 🚀 Risolvitore di Incontri e Frenate Universale")
+                st.write("Inserisci le condizioni di viaggio di entrambi i corpi. Se un corpo si ferma, imposta la sua Velocità Finale a 0.0.")
+        
+                # --- DATI CORPO A ---
+                st.markdown("#### 🟥 CORPO A")
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    s0_a = st.number_input("Posizione Iniziale $s_{0A}$ (m):", value=0.0, key="s0_a")
+                    v0_a = st.number_input("Velocità Iniziale $v_{0A}$ (m/s):", value=0.0, key="v0_a")
+                with col2:
+                    vf_a_inc = st.number_input("Velocità Finale $v_{fA}$ (m/s):", value=0.0, key="vf_a_inc")
+                    a_a = st.number_input("Accelerazione $a_A$ (m/s²):", value=0.0, key="a_a")
+                with col3:
+                    t_a_inc_input = st.number_input("Tempo di moto / frenata $t_A$ (s):", value=0.0, placeholder="0.0 se incognito", key="t_a_inc_in")
+        
+                # --- DATI CORPO B ---
+                st.markdown("#### 🟦 DATI CORPO B")
+                col4, col5, col6 = st.columns(3)
+                with col4:
+                    s0_b = st.number_input("Posizione Iniziale $s_{0B}$ (m):", value=0.0, key="s0_b")
+                    v0_b = st.number_input("Velocità Iniziale $v_{0B}$ (m/s):", value=0.0, key="v0_b")
+                with col5:
+                    vf_b_inc = st.number_input("Velocità Finale $v_{fB}$ (m/s):", value=0.0, key="vf_b_inc")
+                    a_b = st.number_input("Accelerazione $a_B$ (m/s²):", value=0.0, key="a_b")
+                with col6:
+                    t_b_inc_input = st.number_input("Tempo di moto / frenata $t_B$ (s):", value=0.0, placeholder="0.0 se incognito", key="t_b_inc_in")
+        
+                if st.button("Analizza e Risolvi Incontro"):
+                    st.write("### 🎯 Analisi Fisica del Problema:")
                     import sympy as sp
-                    va_sym = sp.Rational(str(v_a))
-                    vb_sym = sp.Rational(str(v_b))
-                    d_sym = sp.Rational(str(distanza))
                     
-                    t_sorpasso = d_sym / sp.Abs(va_sym - vb_sym)
-                    v_inseguitrice = va_sym if va_sym > vb_sym else vb_sym
-                    s_sorpasso = v_inseguitrice * t_sorpasso
+                    t = sp.Symbol('t', positive=True)
                     
-                    t_decimale = float(t_sorpasso.evalf())
-                    s_decimale = float(s_sorpasso.evalf())
+                    # --- LOGICA CORPO A ---
+                    if t_a_inc_input == 0.0 and a_a != 0.0:
+                        t_frenata_a = sp.Rational(str(vf_a_inc - v0_a)) / sp.Rational(str(a_a))
+                        t_a_effettivo = float(t_frenata_a.evalf())
+                        st.success(f"⏱️ Corpo A: Calcolato tempo di frenata/accelerazione = **{t_a_effettivo:.2f} secondi**")
+                    else:
+                        t_a_effettivo = t_a_inc_input
+        
+                    # --- LOGICA CORPO B ---
+                    if t_b_inc_input == 0.0 and a_b != 0.0:
+                        t_frenata_b = sp.Rational(str(vf_b_inc - v0_b)) / sp.Rational(str(a_b))
+                        t_b_effettivo = float(t_frenata_b.evalf())
+                        st.success(f"⏱️ Corpo B: Calcolato tempo di frenata/accelerazione = **{t_b_effettivo:.2f} secondi**")
+                    else:
+                        t_b_effettivo = t_b_inc_input
+        
+                    # --- LEGGI ORARIE SIMBOLICHE ---
+                    s0a_s = sp.Rational(str(s0_a))
+                    v0a_s = sp.Rational(str(v0_a))
+                    aa_s = sp.Rational(str(a_a))
                     
-                    st.markdown("***1. Condizione di sorpasso/incontro:***")
-                    st.latex(r"t = \frac{d}{|v_A - v_B|}")
-                    st.markdown("***2. Sostituzione dei dati e calcolo del tempo:***")
-                    st.latex(f"t = \\frac{{{distanza}}}{{\\lvert {v_a} - {v_b} \\rvert}} = {sp.latex(t_sorpasso)} \\approx {t_decimale:.2f} \\text{{ secondi}}")
-                    st.markdown("***3. Calcolo dello spazio in cui avviene il sorpasso:***")
-                    st.latex(f"s = {float(v_inseguitrice.evalf()):.2f} \\cdot {t_decimale:.2f} = {sp.latex(s_sorpasso)} \\approx {s_decimale:.2f} \\text{{ metri}}")
-                    st.info(f"L'Auto A sorpasserà l'Auto B dopo {t_decimale:.2f} secondi, ad una distanza di {s_decimale:.2f} metri dal punto iniziale.")
-    
-        # === CASO 4: INCONTRO ===
-        # === CASO 4: INCONTRO / SORPASSO UNIVERSALE ===
-        # === CASO 4: INCONTRO / SORPASSO UNIVERSALE ===
-        elif tipo_moto == "Incontro (MRU + MRUA)":
-            st.write("---")
-            st.markdown("### 🚀 Risolvitore di Incontri e Frenate Universale")
-            st.write("Inserisci le condizioni di viaggio di entrambi i corpi. Se un corpo si ferma, imposta la sua Velocità Finale a 0.0.")
-    
-            # --- DATI CORPO A ---
-            st.markdown("#### 🟥 CORPO A")
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                s0_a = st.number_input("Posizione Iniziale $s_{0A}$ (m):", value=0.0, key="s0_a")
-                v0_a = st.number_input("Velocità Iniziale $v_{0A}$ (m/s):", value=0.0, key="v0_a")
-            with col2:
-                vf_a_inc = st.number_input("Velocità Finale $v_{fA}$ (m/s):", value=0.0, key="vf_a_inc")
-                a_a = st.number_input("Accelerazione $a_A$ (m/s²):", value=0.0, key="a_a")
-            with col3:
-                t_a_inc_input = st.number_input("Tempo di moto / frenata $t_A$ (s):", value=0.0, placeholder="0.0 se incognito", key="t_a_inc_in")
-    
-            # --- DATI CORPO B ---
-            st.markdown("#### 🟦 DATI CORPO B")
-            col4, col5, col6 = st.columns(3)
-            with col4:
-                s0_b = st.number_input("Posizione Iniziale $s_{0B}$ (m):", value=0.0, key="s0_b")
-                v0_b = st.number_input("Velocità Iniziale $v_{0B}$ (m/s):", value=0.0, key="v0_b")
-            with col5:
-                vf_b_inc = st.number_input("Velocità Finale $v_{fB}$ (m/s):", value=0.0, key="vf_b_inc")
-                a_b = st.number_input("Accelerazione $a_B$ (m/s²):", value=0.0, key="a_b")
-            with col6:
-                t_b_inc_input = st.number_input("Tempo di moto / frenata $t_B$ (s):", value=0.0, placeholder="0.0 se incognito", key="t_b_inc_in")
-    
-            if st.button("Analizza e Risolvi Incontro"):
-                st.write("### 🎯 Analisi Fisica del Problema:")
-                import sympy as sp
-                
-                t = sp.Symbol('t', positive=True)
-                
-                # --- LOGICA CORPO A ---
-                if t_a_inc_input == 0.0 and a_a != 0.0:
-                    t_frenata_a = sp.Rational(str(vf_a_inc - v0_a)) / sp.Rational(str(a_a))
-                    t_a_effettivo = float(t_frenata_a.evalf())
-                    st.success(f"⏱️ Corpo A: Calcolato tempo di frenata/accelerazione = **{t_a_effettivo:.2f} secondi**")
-                else:
-                    t_a_effettivo = t_a_inc_input
-    
-                # --- LOGICA CORPO B ---
-                if t_b_inc_input == 0.0 and a_b != 0.0:
-                    t_frenata_b = sp.Rational(str(vf_b_inc - v0_b)) / sp.Rational(str(a_b))
-                    t_b_effettivo = float(t_frenata_b.evalf())
-                    st.success(f"⏱️ Corpo B: Calcolato tempo di frenata/accelerazione = **{t_b_effettivo:.2f} secondi**")
-                else:
-                    t_b_effettivo = t_b_inc_input
-    
-                # --- LEGGI ORARIE SIMBOLICHE ---
-                s0a_s = sp.Rational(str(s0_a))
-                v0a_s = sp.Rational(str(v0_a))
-                aa_s = sp.Rational(str(a_a))
-                
-                s0b_s = sp.Rational(str(s0_b))
-                v0b_s = sp.Rational(str(v0_b))
-                ab_s = sp.Rational(str(a_b))
-                
-                legge_A = s0a_s + v0a_s * t + sp.Rational(1, 2) * aa_s * t**2
-                legge_B = s0b_s + v0b_s * t + sp.Rational(1, 2) * ab_s * t**2
-                
-                st.markdown("***1. Equazioni Orarie dei due corpi:***")
-                st.latex(f"s_A(t) = {sp.latex(legge_A)}")
-                st.latex(f"s_B(t) = {sp.latex(legge_B)}")
-                
-                st.markdown("***2. Condizione di Incontro ($s_A(t) = s_B(t)$):***")
-                equazione = sp.Eq(legge_A, legge_B)
-                soluzioni = sp.solve(equazione, t)
-                
-                if not soluzioni:
-                    st.error("❌ Con queste traiettorie i due corpi non si incroceranno mai.")
-                else:
-                    t_inc = soluzioni[0]
-                    s_inc = legge_A.subs(t, t_inc)
+                    s0b_s = sp.Rational(str(s0_b))
+                    v0b_s = sp.Rational(str(v0_b))
+                    ab_s = sp.Rational(str(a_b))
                     
-                    t_dec = float(t_inc.evalf())
-                    s_dec = float(s_inc.evalf())
+                    legge_A = s0a_s + v0a_s * t + sp.Rational(1, 2) * aa_s * t**2
+                    legge_B = s0b_s + v0b_s * t + sp.Rational(1, 2) * ab_s * t**2
                     
-                    st.latex(f"{sp.latex(legge_A)} = {sp.latex(legge_B)}")
-                    st.markdown("***3. Risultati del punto di contatto:***")
-                    st.latex(r"t_{\text{incontro}} = " + f"{sp.latex(t_inc)} \\approx {t_dec:.2f} \\text{{ secondi}}")
-                    st.latex(r"s_{\text{incontro}} = " + f"{sp.latex(s_inc)} \\approx {s_dec:.2f} \\text{{ metri}}")
+                    st.markdown("***1. Equazioni Orarie dei due corpi:***")
+                    st.latex(f"s_A(t) = {sp.latex(legge_A)}")
+                    st.latex(f"s_B(t) = {sp.latex(legge_B)}")
                     
-                    if t_a_effettivo > 0 and t_dec > t_a_effettivo and vf_a_inc == 0.0:
-                        st.warning("⚠️ Nota: Il Corpo A ha completato la sua frenata e si è fermato prima dell'istante di incontro!")
-                    if t_b_effettivo > 0 and t_dec > t_b_effettivo and vf_b_inc == 0.0:
-                        st.warning("⚠️ Nota: Il Corpo B ha completato la sua frenata e si è fermato prima dell'istante di incontro!")
-    
-                    st.info(f"L'evento di incontro/sorpasso si verificherà dopo {t_dec:.2f} secondi a {s_dec:.2f} metri dall'origine.")
+                    st.markdown("***2. Condizione di Incontro ($s_A(t) = s_B(t)$):***")
+                    equazione = sp.Eq(legge_A, legge_B)
+                    soluzioni = sp.solve(equazione, t)
+                    
+                    if not soluzioni:
+                        st.error("❌ Con queste traiettorie i due corpi non si incroceranno mai.")
+                    else:
+                        t_inc = soluzioni[0]
+                        s_inc = legge_A.subs(t, t_inc)
+                        
+                        t_dec = float(t_inc.evalf())
+                        s_dec = float(s_inc.evalf())
+                        
+                        st.latex(f"{sp.latex(legge_A)} = {sp.latex(legge_B)}")
+                        st.markdown("***3. Risultati del punto di contatto:***")
+                        st.latex(r"t_{\text{incontro}} = " + f"{sp.latex(t_inc)} \\approx {t_dec:.2f} \\text{{ secondi}}")
+                        st.latex(r"s_{\text{incontro}} = " + f"{sp.latex(s_inc)} \\approx {s_dec:.2f} \\text{{ metri}}")
+                        
+                        if t_a_effettivo > 0 and t_dec > t_a_effettivo and vf_a_inc == 0.0:
+                            st.warning("⚠️ Nota: Il Corpo A ha completato la sua frenata e si è fermato prima dell'istante di incontro!")
+                        if t_b_effettivo > 0 and t_dec > t_b_effettivo and vf_b_inc == 0.0:
+                            st.warning("⚠️ Nota: Il Corpo B ha completato la sua frenata e si è fermato prima dell'istante di incontro!")
+        
+                        st.info(f"L'evento di incontro/sorpasso si verificherà dopo {t_dec:.2f} secondi a {s_dec:.2f} metri dall'origine.")
