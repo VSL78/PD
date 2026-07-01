@@ -71,28 +71,25 @@ elif authentication_status == True:
     # =================================================================
     elif sezione == "Algebra":
         st.title("Strumenti e Formule di Algebra")
+        
         stringa_spaziata = "" 
         pezzi = re.findall(r'[+-]?\d*x\^2|[+-]?\d*x|[+-]?\d+|[><=]', stringa_spaziata)
         
         # Sotto-menu per l'Algebra
         sub_algebra = st.selectbox("Scegli l'argomento:", ["Risolutore Equazioni/Disequazioni", "La Parabola", "La Retta"])
         
-       # Sotto il menu Algebra...
+  
     if sub_algebra == "Risolutore Equazioni/Disequazioni":
         st.subheader("Risolutore Automatico di 2° Grado")
 
         stringa_utente = st.text_input("Inserisci l'equazione o disequazione:")
-        
-        # SPOSTA TUTTO QUI DENTRO:
+    
         if stringa_utente:
             stringa_spaziata = re.sub(r'([><=])', r' \1 ', stringa_utente)
             pezzi = re.findall(r'[+-]?\d*x\^2|[+-]?\d*x|[+-]?\d+|[><=]', stringa_spaziata)
-            
-            # ... resto del tuo codice che usa 'pezzi' ...
             simbolo = ""
             if ">" in stringa_utente:
                 simbolo = ">"
-            # ... e così via
         elif "<" in stringa_utente:
             simbolo = "<"
         elif "=" in stringa_utente:
