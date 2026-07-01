@@ -1,8 +1,6 @@
 import streamlit as st
 import streamlit_authenticator as stauth
 import sympy as sp
-stringa_spaziata = "" 
-pezzi = re.findall(r'[+-]?\d*x\^2|[+-]?\d*x|[+-]?\d+|[><=]', stringa_spaziata)
 utenti = {
     "usernames": {
         "Francescopizzichemi13@gmail.com": {
@@ -73,6 +71,8 @@ elif authentication_status == True:
     # =================================================================
     elif sezione == "Algebra":
         st.title("Strumenti e Formule di Algebra")
+        stringa_spaziata = "" 
+        pezzi = re.findall(r'[+-]?\d*x\^2|[+-]?\d*x|[+-]?\d+|[><=]', stringa_spaziata)
         
         # Sotto-menu per l'Algebra
         sub_algebra = st.selectbox("Scegli l'argomento:", ["Risolutore Equazioni/Disequazioni", "La Parabola", "La Retta"])
