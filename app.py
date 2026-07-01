@@ -83,6 +83,13 @@ elif authentication_status == True:
         st.subheader("Risolutore Automatico di 2° Grado")
 
         stringa_utente = st.text_input("Inserisci l'equazione o disequazione:")
+        if stringa_utente:
+    # Ora definiamo le variabili dentro l'if
+        stringa_spaziata = re.sub(r'([><=])', r' \1 ', stringa_utente)
+        pezzi = re.findall(r'[+-]?\d*x\^2|[+-]?\d*x|[+-]?\d+|[><=]', stringa_spaziata)
+    
+    # ... qui inserisci tutto il resto del codice che processa 'pezzi' ...
+        st.write(f"Operazione inserita: {stringa_utente}")
     
         if stringa_utente:
             stringa_spaziata = re.sub(r'([><=])', r' \1 ', stringa_utente)
