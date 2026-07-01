@@ -84,6 +84,11 @@ elif authentication_status == True:
 
         stringa_utente = st.text_input("Inserisci l'equazione o disequazione:")
         if stringa_utente:
+        stringa_spaziata = re.sub(r'([><=])', r' \1 ', stringa_utente)
+        pezzi = re.findall(r'[+-]?\d*x\^2|[+-]?\d*x|[+-]?\d+|[><=]', stringa_spaziata)
+            
+        st.write(f"Operazione inserita: {stringa_utente}")
+        if stringa_utente:
             stringa_spaziata = re.sub(r'([><=])', r' \1 ', stringa_utente)
             pezzi = re.findall(r'[+-]?\d*x\^2|[+-]?\d*x|[+-]?\d+|[><=]', stringa_spaziata)
             simbolo = ""
