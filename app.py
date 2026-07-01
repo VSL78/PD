@@ -1,6 +1,8 @@
 import streamlit as st
 import streamlit_authenticator as stauth
 import sympy as sp
+stringa_spaziata = "" 
+pezzi = re.findall(r'[+-]?\d*x\^2|[+-]?\d*x|[+-]?\d+|[><=]', stringa_spaziata)
 utenti = {
     "usernames": {
         "Francescopizzichemi13@gmail.com": {
